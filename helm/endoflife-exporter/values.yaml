@@ -1,0 +1,87 @@
+replicaCount: 1
+
+image:
+  repository: reimlima/endoflife_exporter
+  # Defaults to Chart.appVersion
+  tag: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+podAnnotations: {}
+podLabels: {}
+
+# Rendered verbatim into the ConfigMap as config.yaml (mounted at /app/config/config.yaml).
+# `port` is also used for the container port and the Service port.
+config:
+  port: 2112
+  products:
+    - ubuntu:
+        host: localhost
+        version: "22.04"
+    - nodejs:
+        host: localhost
+        version: "22"
+    - go:
+        host: localhost
+        version: "1.25"
+
+service:
+  type: ClusterIP
+  annotations: {}
+
+# Requires the Prometheus Operator CRDs (monitoring.coreos.com/v1)
+serviceMonitor:
+  enabled: false
+  namespace: ""
+  interval: 30s
+  scrapeTimeout: 10s
+  path: /metrics
+  # Extra labels, e.g. `release: kube-prometheus-stack` to match the Prometheus selector
+  labels: {}
+  relabelings: []
+  metricRelabelings: []
+
+resources: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+livenessProbe:
+  httpGet:
+    path: /metrics
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 10
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /metrics
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 30
+  timeoutSeconds: 10
+  failureThreshold: 3
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

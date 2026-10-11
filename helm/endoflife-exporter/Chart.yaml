@@ -1,0 +1,6 @@
+apiVersion: v2
+name: endoflife-exporter
+description: Prometheus exporter that publishes end-of-life dates for products from endoflife.date
+type: application
+version: 0.1.0
+appVersion: "latest"
