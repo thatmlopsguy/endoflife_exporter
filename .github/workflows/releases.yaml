@@ -57,7 +57,7 @@ jobs:
         cp endoflife_exporter dist/
         cp README.md dist/
         cp LICENSE dist/
-        cp endoflife_exporter.service dist/
+        cp systemd/endoflife_exporter.service dist/
         cd dist && tar -czvf ../endoflife_exporter_${{ github.ref_name }}.tar.gz .
 
     - name: Upload release artifact
